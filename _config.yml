@@ -1,0 +1,21 @@
+# Next Target Operational Plan Dashboard
+title: Next Target Training Company
+description: Q1 2026 Operational Plan - Interactive Dashboard
+theme: jekyll-theme-minimal
+plugins:
+  - jekyll-relative-links
+
+relative_links:
+  enabled: true
+  collections: true
+
+exclude:
+  - .git
+  - .gitignore
+  - node_modules
+  - vendor
+  - Gemfile
+  - Gemfile.lock
+
+# GitHub Pages settings
+markdown: kramdown
