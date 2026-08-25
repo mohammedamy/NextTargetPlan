@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
+    <script>
+        (function() {
+            var savedLang = localStorage.getItem('dashboardLang') || 'ar';
+            document.documentElement.lang = savedLang;
+            document.documentElement.dir = savedLang === 'ar' ? 'rtl' : 'ltr';
+        })();
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Next Target - Q1 2026 Operational Dashboard</title>
@@ -695,14 +702,34 @@
             }
         };
 
-        let currentLang = 'en';
+        const chartLabels = {
+            en: {
+                budgetPie: ['Rent 30%', 'Salaries 15%', 'Marketing 18%', 'Licenses 15%', 'Utilities 12%', 'Tech 10%'],
+                weeks: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6', 'Week 7', 'Week 8', 'Week 9', 'Week 10', 'Week 11', 'Week 12'],
+                revenueLabel: 'Projected Revenue (SAR)',
+                costsLabel: 'Operating Costs (SAR)',
+                currencySuffix: ' SAR'
+            },
+            ar: {
+                budgetPie: ['الإيجار 30%', 'الرواتب 15%', 'التسويق 18%', 'الرخص 15%', 'المرافق 12%', 'التقنية 10%'],
+                weeks: ['الأسبوع 1', 'الأسبوع 2', 'الأسبوع 3', 'الأسبوع 4', 'الأسبوع 5', 'الأسبوع 6', 'الأسبوع 7', 'الأسبوع 8', 'الأسبوع 9', 'الأسبوع 10', 'الأسبوع 11', 'الأسبوع 12'],
+                revenueLabel: 'الإيرادات المتوقعة (ريال)',
+                costsLabel: 'التكاليف التشغيلية (ريال)',
+                currencySuffix: ' ريال'
+            }
+        };
+
+        let currentLang = localStorage.getItem('dashboardLang') || 'ar';
+        let budgetChartInstance = null;
+        let revenueChartInstance = null;
 
         function toggleLanguage() {
             currentLang = currentLang === 'en' ? 'ar' : 'en';
+            localStorage.setItem('dashboardLang', currentLang);
             document.documentElement.lang = currentLang;
             document.documentElement.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
             updateLanguage();
-            location.reload();
+            updateCharts();
         }
 
         function updateLanguage() {
@@ -714,14 +741,28 @@
             });
         }
 
+        function updateCharts() {
+            const cl = chartLabels[currentLang];
+            if (budgetChartInstance) {
+                budgetChartInstance.data.labels = cl.budgetPie;
+                budgetChartInstance.update();
+            }
+            if (revenueChartInstance) {
+                revenueChartInstance.data.labels = cl.weeks;
+                revenueChartInstance.data.datasets[0].label = cl.revenueLabel;
+                revenueChartInstance.data.datasets[1].label = cl.costsLabel;
+                revenueChartInstance.update();
+            }
+        }
+
         // Initialize charts on load
         document.addEventListener('DOMContentLoaded', function() {
             // Budget Pie Chart
             const budgetCtx = document.getElementById('budgetChart').getContext('2d');
-            new Chart(budgetCtx, {
+            budgetChartInstance = new Chart(budgetCtx, {
                 type: 'doughnut',
                 data: {
-                    labels: ['Rent 30%', 'Salaries 15%', 'Marketing 18%', 'Licenses 15%', 'Utilities 12%', 'Tech 10%'],
+                    labels: chartLabels[currentLang].budgetPie,
                     datasets: [{
                         data: [30, 15, 18, 15, 12, 10],
                         backgroundColor: [
@@ -753,13 +794,13 @@
 
             // Revenue Line Chart
             const revenueCtx = document.getElementById('revenueChart').getContext('2d');
-            new Chart(revenueCtx, {
+            revenueChartInstance = new Chart(revenueCtx, {
                 type: 'line',
                 data: {
-                    labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6', 'Week 7', 'Week 8', 'Week 9', 'Week 10', 'Week 11', 'Week 12'],
+                    labels: chartLabels[currentLang].weeks,
                     datasets: [
                         {
-                            label: 'Projected Revenue (SAR)',
+                            label: chartLabels[currentLang].revenueLabel,
                             data: [5000, 7000, 9000, 12000, 15000, 18000, 22000, 26000, 31000, 37000, 44000, 52000],
                             borderColor: '#2ecc71',
                             backgroundColor: 'rgba(46, 204, 113, 0.1)',
@@ -772,7 +813,7 @@
                             pointBorderWidth: 2
                         },
                         {
-                            label: 'Operating Costs (SAR)',
+                            label: chartLabels[currentLang].costsLabel,
                             data: [3000, 3000, 3000, 3000, 3000, 3000, 3000, 3000, 3000, 3000, 3000, 3000],
                             borderColor: '#e74c3c',
                             backgroundColor: 'rgba(231, 76, 60, 0.1)',
@@ -797,7 +838,7 @@
                             beginAtZero: true,
                             ticks: {
                                 callback: function(value) {
-                                    return value.toLocaleString() + ' SAR';
+                                    return value.toLocaleString() + chartLabels[currentLang].currencySuffix;
                                 }
                             }
                         }
