@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Next Target - Q1 2026 Operational Dashboard</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #1a3a52;
+            --accent: #2ecc71;
+            --secondary: #3498db;
+            --gold: #f39c12;
+            --text: #2c3e50;
+            --light: #ecf0f1;
+            --danger: #e74c3c;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        .header {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .logo-placeholder {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+            text-align: center;
+            padding: 10px;
+            font-weight: bold;
+        }
+
+        .company-info h1 {
+            font-size: 28px;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        .company-info p {
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+
+        .header-stats {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .stat-box {
+            background: linear-gradient(135deg, var(--accent) 0%, #27ae60 100%);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            text-align: center;
+            min-width: 120px;
+        }
+
+        .stat-box.secondary {
+            background: linear-gradient(135deg, var(--secondary) 0%, #2980b9 100%);
+        }
+
+        .stat-box.gold {
+            background: linear-gradient(135deg, var(--gold) 0%, #e67e22 100%);
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            opacity: 0.9;
+            margin-top: 5px;
+        }
+
+        /* Main Content */
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(600px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-title-ar {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--secondary);
+            margin-bottom: 5px;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+        }
+
+        /* Budget Table */
+        .budget-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        .budget-table th {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 12px;
+            text-align: right;
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .budget-table td {
+            padding: 12px;
+            border-bottom: 1px solid #ecf0f1;
+            font-size: 14px;
+        }
+
+        .budget-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .budget-table .amount {
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .budget-table .total {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e8eaed 100%);
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        /* KPI Grid */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .kpi-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #ecf0f1 100%);
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid var(--accent);
+        }
+
+        .kpi-card.danger {
+            border-left-color: var(--danger);
+        }
+
+        .kpi-label {
+            font-size: 12px;
+            color: #7f8c8d;
+            margin-bottom: 5px;
+        }
+
+        .kpi-value {
+            font-size: 20px;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            margin-top: 20px;
+        }
+
+        .timeline-item {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .timeline-marker {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            flex-shrink: 0;
+            position: relative;
+            z-index: 2;
+        }
+
+        .timeline-marker.completed {
+            background: var(--accent);
+        }
+
+        .timeline-marker.pending {
+            background: #95a5a6;
+        }
+
+        .timeline-content {
+            padding-top: 8px;
+            flex: 1;
+        }
+
+        .timeline-content h4 {
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        .timeline-content p {
+            font-size: 13px;
+            color: #7f8c8d;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .logo-section {
+                flex-direction: column;
+                justify-content: center;
+            }
+
+            .header-stats {
+                justify-content: center;
+            }
+
+            .company-info h1 {
+                font-size: 24px;
+            }
+        }
+
+        /* Language Toggle */
+        .lang-toggle {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: white;
+            border: 2px solid var(--primary);
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--primary);
+            z-index: 100;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .lang-toggle:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Footer */
+        .footer {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            color: #7f8c8d;
+            font-size: 12px;
+            margin-top: 30px;
+        }
+
+        .footer a {
+            color: var(--secondary);
+            text-decoration: none;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #ecf0f1;
+            border-radius: 4px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent) 0%, var(--secondary) 100%);
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        .section-divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #ddd, transparent);
+            margin: 30px 0;
+        }
+    </style>
+</head>
+<body>
+    <button class="lang-toggle" onclick="toggleLanguage()">English | العربية</button>
+
+    <div class="container">
+        <!-- Header with Logo -->
+        <div class="header">
+            <div class="logo-section">
+                <div class="logo-placeholder">
+                    NEXT<br>TARGET<br>🎯
+                </div>
+                <div class="company-info">
+                    <h1 id="company">Next Target Training Company</h1>
+                    <p id="subtitle">Q1 2026 Operational Plan | الخطة التشغيلية</p>
+                </div>
+            </div>
+            <div class="header-stats">
+                <div class="stat-box">
+                    <span class="stat-value">100K</span>
+                    <span class="stat-label" id="label-budget">Budget SAR</span>
+                </div>
+                <div class="stat-box secondary">
+                    <span class="stat-value">20+</span>
+                    <span class="stat-label" id="label-clients">New Clients</span>
+                </div>
+                <div class="stat-box gold">
+                    <span class="stat-value">85%+</span>
+                    <span class="stat-label" id="label-satisfaction">Satisfaction</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="content-grid">
+            <!-- Budget Breakdown -->
+            <div class="card">
+                <h2 class="card-title">💰 <span id="title-budget">Budget Allocation</span></h2>
+                <p class="card-title-ar" id="title-budget-ar">توزيع الميزانية</p>
+                <table class="budget-table">
+                    <thead>
+                        <tr>
+                            <th id="th-item">Item</th>
+                            <th id="th-amount">Amount (SAR)</th>
+                            <th id="th-percent">%</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td id="item-rent">Office Rent</td>
+                            <td class="amount">30,000</td>
+                            <td>30%</td>
+                        </tr>
+                        <tr>
+                            <td id="item-salary">Salaries</td>
+                            <td class="amount">15,000</td>
+                            <td>15%</td>
+                        </tr>
+                        <tr>
+                            <td id="item-marketing">Marketing & Content</td>
+                            <td class="amount">18,000</td>
+                            <td>18%</td>
+                        </tr>
+                        <tr>
+                            <td id="item-licenses">Licenses & Insurance</td>
+                            <td class="amount">15,000</td>
+                            <td>15%</td>
+                        </tr>
+                        <tr>
+                            <td id="item-utilities">Utilities & Admin</td>
+                            <td class="amount">12,000</td>
+                            <td>12%</td>
+                        </tr>
+                        <tr>
+                            <td id="item-tech">Technical Tools</td>
+                            <td class="amount">10,000</td>
+                            <td>10%</td>
+                        </tr>
+                        <tr class="total">
+                            <td id="total-label">TOTAL</td>
+                            <td class="amount">100,000</td>
+                            <td>100%</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 100%"></div>
+                </div>
+            </div>
+
+            <!-- Budget Pie Chart -->
+            <div class="card">
+                <h2 class="card-title">📊 <span id="title-distribution">Budget Distribution</span></h2>
+                <p class="card-title-ar" id="title-distribution-ar">توزيع الميزانية</p>
+                <div class="chart-container">
+                    <canvas id="budgetChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <!-- KPIs -->
+        <div class="card">
+            <h2 class="card-title">🎯 <span id="title-kpi">Key Performance Indicators</span></h2>
+            <p class="card-title-ar" id="title-kpi-ar">المؤشرات الرئيسية للأداء</p>
+            <div class="kpi-grid">
+                <div class="kpi-card">
+                    <div class="kpi-label" id="kpi1-label">New Clients/Month</div>
+                    <div class="kpi-value">20+</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label" id="kpi2-label">Satisfaction Rate</div>
+                    <div class="kpi-value">85%+</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label" id="kpi3-label">ROI (Quarterly)</div>
+                    <div class="kpi-value">200%+</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label" id="kpi4-label">CAC Target</div>
+                    <div class="kpi-value">&lt; 500 SAR</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label" id="kpi5-label">Profit Margin</div>
+                    <div class="kpi-value">30%+</div>
+                </div>
+                <div class="kpi-card danger">
+                    <div class="kpi-label" id="kpi6-label">Breakeven</div>
+                    <div class="kpi-value">Month 2</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <!-- Implementation Timeline -->
+        <div class="card">
+            <h2 class="card-title">📅 <span id="title-timeline">Implementation Timeline</span></h2>
+            <p class="card-title-ar" id="title-timeline-ar">خطة التنفيذ الزمنية</p>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-marker completed">1</div>
+                    <div class="timeline-content">
+                        <h4 id="month1">Month 1: Foundation</h4>
+                        <p id="month1-desc">Setup infrastructure, hire staff, establish processes</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker completed">2</div>
+                    <div class="timeline-content">
+                        <h4 id="month2">Month 2: Market Entry</h4>
+                        <p id="month2-desc">Launch marketing, acquire first clients, establish brand</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker completed">3</div>
+                    <div class="timeline-content">
+                        <h4 id="month3">Month 3: Optimization</h4>
+                        <p id="month3-desc">Analyze performance, optimize processes, plan expansion</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker pending">4</div>
+                    <div class="timeline-content">
+                        <h4 id="month4">Q2 Planning</h4>
+                        <p id="month4-desc">Scale operations, expand service offerings, increase revenue</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <!-- Revenue Projection -->
+        <div class="card">
+            <h2 class="card-title">📈 <span id="title-revenue">Revenue Projection</span></h2>
+            <p class="card-title-ar" id="title-revenue-ar">توقعات الإيرادات</p>
+            <div class="chart-container">
+                <canvas id="revenueChart"></canvas>
+            </div>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <!-- Operational Structure -->
+        <div class="card">
+            <h2 class="card-title">👥 <span id="title-structure">Organizational Structure</span></h2>
+            <p class="card-title-ar" id="title-structure-ar">الهيكل التنظيمي</p>
+            <table class="budget-table">
+                <thead>
+                    <tr>
+                        <th id="th-role">Position</th>
+                        <th id="th-salary">Monthly Salary</th>
+                        <th id="th-q1">Q1 Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td id="op-manager">Operations Manager</td>
+                        <td class="amount">3,500</td>
+                        <td class="amount">10,500</td>
+                    </tr>
+                    <tr>
+                        <td id="tr-coordinator">Training Coordinator</td>
+                        <td class="amount">1,500</td>
+                        <td class="amount">4,500</td>
+                    </tr>
+                    <tr class="total">
+                        <td id="total-staff">TOTAL STAFFING</td>
+                        <td class="amount">5,000</td>
+                        <td class="amount">15,000</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p id="footer-text">© 2026 Next Target Training Company | نكست تارجت للتدريب والاستشارات</p>
+            <p id="footer-desc">Professional operational planning for sustainable business growth</p>
+        </div>
+    </div>
+
+    <script>
+        // Bilingual Support
+        const translations = {
+            en: {
+                'company': 'Next Target Training Company',
+                'subtitle': 'Q1 2026 Operational Plan',
+                'label-budget': 'Budget SAR',
+                'label-clients': 'New Clients',
+                'label-satisfaction': 'Satisfaction',
+                'title-budget': 'Budget Allocation',
+                'title-budget-ar': 'Q1 Budget: 100,000 SAR',
+                'title-distribution': 'Budget Distribution',
+                'title-distribution-ar': 'Breakdown by Category',
+                'th-item': 'Item',
+                'th-amount': 'Amount (SAR)',
+                'th-percent': '%',
+                'item-rent': 'Office Rent',
+                'item-salary': 'Salaries',
+                'item-marketing': 'Marketing & Content',
+                'item-licenses': 'Licenses & Insurance',
+                'item-utilities': 'Utilities & Admin',
+                'item-tech': 'Technical Tools',
+                'total-label': 'TOTAL',
+                'title-kpi': 'Key Performance Indicators',
+                'title-kpi-ar': 'Growth Targets',
+                'kpi1-label': 'New Clients/Month',
+                'kpi2-label': 'Satisfaction Rate',
+                'kpi3-label': 'ROI (Quarterly)',
+                'kpi4-label': 'CAC Target',
+                'kpi5-label': 'Profit Margin',
+                'kpi6-label': 'Breakeven Target',
+                'title-timeline': 'Implementation Timeline',
+                'title-timeline-ar': 'Phased Rollout',
+                'month1': 'Month 1: Foundation',
+                'month1-desc': 'Setup infrastructure, hire staff, establish processes',
+                'month2': 'Month 2: Market Entry',
+                'month2-desc': 'Launch marketing, acquire first clients, establish brand',
+                'month3': 'Month 3: Optimization',
+                'month3-desc': 'Analyze performance, optimize processes, plan expansion',
+                'month4': 'Q2 Planning',
+                'month4-desc': 'Scale operations, expand service offerings, increase revenue',
+                'title-revenue': 'Revenue Projection',
+                'title-revenue-ar': '3-Month Forecast',
+                'title-structure': 'Organizational Structure',
+                'title-structure-ar': 'Team Composition',
+                'th-role': 'Position',
+                'th-salary': 'Monthly Salary',
+                'th-q1': 'Q1 Total',
+                'op-manager': 'Operations Manager',
+                'tr-coordinator': 'Training Coordinator',
+                'total-staff': 'TOTAL STAFFING',
+                'footer-text': '© 2026 Next Target Training Company',
+                'footer-desc': 'Professional operational planning for sustainable business growth'
+            },
+            ar: {
+                'company': 'نكست تارجت للتدريب والاستشارات',
+                'subtitle': 'الخطة التشغيلية للربع الأول 2026',
+                'label-budget': 'الميزانية (ريال)',
+                'label-clients': 'عملاء جدد',
+                'label-satisfaction': 'رضا العملاء',
+                'title-budget': 'توزيع الميزانية',
+                'title-budget-ar': 'إجمالي الميزانية: 100,000 ريال',
+                'title-distribution': 'توزيع الميزانية',
+                'title-distribution-ar': 'التفصيل حسب الفئة',
+                'th-item': 'البند',
+                'th-amount': 'المبلغ (ريال)',
+                'th-percent': '%',
+                'item-rent': 'إيجار المكتب',
+                'item-salary': 'الرواتب',
+                'item-marketing': 'التسويق والمحتوى',
+                'item-licenses': 'الرخص والتأمين',
+                'item-utilities': 'المرافق والإدارة',
+                'item-tech': 'الأدوات التقنية',
+                'total-label': 'الإجمالي',
+                'title-kpi': 'مؤشرات الأداء الرئيسية',
+                'title-kpi-ar': 'أهداف النمو',
+                'kpi1-label': 'عملاء جدد/شهر',
+                'kpi2-label': 'معدل الرضا',
+                'kpi3-label': 'العائد على الاستثمار',
+                'kpi4-label': 'تكلفة اكتساب العميل',
+                'kpi5-label': 'هامش الربح',
+                'kpi6-label': 'نقطة التعادل',
+                'title-timeline': 'الجدول الزمني للتنفيذ',
+                'title-timeline-ar': 'المراحل المختلفة',
+                'month1': 'الشهر الأول: التأسيس',
+                'month1-desc': 'إعداد البنية التحتية وتوظيف الموظفين وتأسيس العمليات',
+                'month2': 'الشهر الثاني: الدخول للسوق',
+                'month2-desc': 'إطلاق التسويق واكتساب العملاء الأوائل',
+                'month3': 'الشهر الثالث: التحسين',
+                'month3-desc': 'تحليل الأداء وتحسين العمليات',
+                'month4': 'تخطيط الربع الثاني',
+                'month4-desc': 'توسيع العمليات وزيادة الإيرادات',
+                'title-revenue': 'توقعات الإيرادات',
+                'title-revenue-ar': 'التنبؤ لمدة 3 أشهر',
+                'title-structure': 'الهيكل التنظيمي',
+                'title-structure-ar': 'تشكيل الفريق',
+                'th-role': 'المنصب',
+                'th-salary': 'الراتب الشهري',
+                'th-q1': 'إجمالي الربع الأول',
+                'op-manager': 'مدير العمليات',
+                'tr-coordinator': 'منسق التدريب',
+                'total-staff': 'إجمالي الرواتب',
+                'footer-text': '© 2026 نكست تارجت للتدريب والاستشارات',
+                'footer-desc': 'التخطيط التشغيلي الاحترافي لنمو الأعمال المستدام'
+            }
+        };
+
+        let currentLang = 'en';
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'en' ? 'ar' : 'en';
+            document.documentElement.lang = currentLang;
+            document.documentElement.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
+            updateLanguage();
+            location.reload();
+        }
+
+        function updateLanguage() {
+            Object.keys(translations[currentLang]).forEach(key => {
+                const element = document.getElementById(key);
+                if (element) {
+                    element.textContent = translations[currentLang][key];
+                }
+            });
+        }
+
+        // Initialize charts on load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Budget Pie Chart
+            const budgetCtx = document.getElementById('budgetChart').getContext('2d');
+            new Chart(budgetCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Rent 30%', 'Salaries 15%', 'Marketing 18%', 'Licenses 15%', 'Utilities 12%', 'Tech 10%'],
+                    datasets: [{
+                        data: [30, 15, 18, 15, 12, 10],
+                        backgroundColor: [
+                            '#1a3a52',
+                            '#2ecc71',
+                            '#3498db',
+                            '#f39c12',
+                            '#e74c3c',
+                            '#9b59b6'
+                        ],
+                        borderColor: 'white',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 15,
+                                font: { size: 12 }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Revenue Line Chart
+            const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+            new Chart(revenueCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6', 'Week 7', 'Week 8', 'Week 9', 'Week 10', 'Week 11', 'Week 12'],
+                    datasets: [
+                        {
+                            label: 'Projected Revenue (SAR)',
+                            data: [5000, 7000, 9000, 12000, 15000, 18000, 22000, 26000, 31000, 37000, 44000, 52000],
+                            borderColor: '#2ecc71',
+                            backgroundColor: 'rgba(46, 204, 113, 0.1)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.4,
+                            pointRadius: 5,
+                            pointBackgroundColor: '#2ecc71',
+                            pointBorderColor: 'white',
+                            pointBorderWidth: 2
+                        },
+                        {
+                            label: 'Operating Costs (SAR)',
+                            data: [3000, 3000, 3000, 3000, 3000, 3000, 3000, 3000, 3000, 3000, 3000, 3000],
+                            borderColor: '#e74c3c',
+                            backgroundColor: 'rgba(231, 76, 60, 0.1)',
+                            borderWidth: 2,
+                            fill: true,
+                            tension: 0.4,
+                            pointRadius: 4,
+                            pointBackgroundColor: '#e74c3c'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: { font: { size: 12 } }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return value.toLocaleString() + ' SAR';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            updateLanguage();
+        });
+    </script>
+</body>
+</html>
