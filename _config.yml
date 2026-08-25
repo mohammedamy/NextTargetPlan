@@ -1,23 +1,44 @@
-# Next Target Operational Plan Dashboard
-title: Next Target Training Company
-description: Q1 2026 Operational Plan - Interactive Dashboard
-theme: jekyll-theme-minimal
+# GitHub Pages - Next Target Dashboard
+title: "Next Target Training Company"
+description: "Q1 2026 Operational Plan Dashboard"
+author: "mohammedamy"
+
+# Build settings
+markdown: kramdown
+theme: null
+
+# Plugins
 plugins:
+  - jekyll-feed
   - jekyll-relative-links
 
 relative_links:
   enabled: true
   collections: true
 
+# Exclude from build (nothing to exclude - we want everything)
 exclude:
   - .git
   - .gitignore
-  - node_modules
-  - vendor
   - Gemfile
   - Gemfile.lock
+  - node_modules
+  - vendor
 
-# GitHub Pages settings
-markdown: kramdown
-# Rebuild trigger
-build_timestamp: 2026-08-25_08-00
+# Include everything else
+include:
+  - .nojekyll
+  - operational-plan-dashboard.html
+  - NextTarget_Operational_Plan.html
+  - index.html
+
+# Collections
+collections_dir: .
+
+# Source and destination
+source: .
+destination: _site
+
+# URL settings
+url: "https://mohammedamy.github.io"
+baseurl: "/NextTargetPlan"
