@@ -19,3 +19,5 @@ exclude:
 
 # GitHub Pages settings
 markdown: kramdown
+# Rebuild trigger
+build_timestamp: 2026-08-25_08-00
