@@ -65,19 +65,13 @@
             min-width: 300px;
         }
 
-        .logo-placeholder {
-            width: 120px;
-            height: 120px;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            border-radius: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 14px;
-            text-align: center;
-            padding: 10px;
-            font-weight: bold;
+        .company-logo {
+            height: 100px;
+            width: auto;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(26, 58, 82, 0.25);
+            flex-shrink: 0;
+            object-fit: contain;
         }
 
         .company-info h1 {
@@ -380,9 +374,7 @@
         <!-- Header with Logo -->
         <div class="header">
             <div class="logo-section">
-                <div class="logo-placeholder">
-                    NEXT<br>TARGET<br>🎯
-                </div>
+                <img src="NextTarget_Logo_header.png" alt="Next Target Training Company - نكست تارجت للتدريب والاستشارات" class="company-logo">
                 <div class="company-info">
                     <h1 id="company">Next Target Training Company</h1>
                     <p id="subtitle">Q1 2026 Operational Plan | الخطة التشغيلية</p>
