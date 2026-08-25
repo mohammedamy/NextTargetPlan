@@ -412,14 +412,9 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td id="item-rent">Office Rent</td>
-                            <td class="amount">30,000</td>
-                            <td>30%</td>
-                        </tr>
-                        <tr>
                             <td id="item-salary">Salaries</td>
-                            <td class="amount">15,000</td>
-                            <td>15%</td>
+                            <td class="amount">45,000</td>
+                            <td>45%</td>
                         </tr>
                         <tr>
                             <td id="item-marketing">Marketing & Content</td>
@@ -563,18 +558,18 @@
                 <tbody>
                     <tr>
                         <td id="op-manager">Operations Manager</td>
-                        <td class="amount">3,500</td>
                         <td class="amount">10,500</td>
+                        <td class="amount">31,500</td>
                     </tr>
                     <tr>
                         <td id="tr-coordinator">Training Coordinator</td>
-                        <td class="amount">1,500</td>
                         <td class="amount">4,500</td>
+                        <td class="amount">13,500</td>
                     </tr>
                     <tr class="total">
                         <td id="total-staff">TOTAL STAFFING</td>
-                        <td class="amount">5,000</td>
                         <td class="amount">15,000</td>
+                        <td class="amount">45,000</td>
                     </tr>
                 </tbody>
             </table>
@@ -603,7 +598,6 @@
                 'th-item': 'Item',
                 'th-amount': 'Amount (SAR)',
                 'th-percent': '%',
-                'item-rent': 'Office Rent',
                 'item-salary': 'Salaries',
                 'item-marketing': 'Marketing & Content',
                 'item-licenses': 'Licenses & Insurance',
@@ -654,7 +648,6 @@
                 'th-item': 'البند',
                 'th-amount': 'المبلغ (ريال)',
                 'th-percent': '%',
-                'item-rent': 'إيجار المكتب',
                 'item-salary': 'الرواتب',
                 'item-marketing': 'التسويق والمحتوى',
                 'item-licenses': 'الرخص والتأمين',
@@ -696,14 +689,14 @@
 
         const chartLabels = {
             en: {
-                budgetPie: ['Rent 30%', 'Salaries 15%', 'Marketing 18%', 'Licenses 15%', 'Utilities 12%', 'Tech 10%'],
+                budgetPie: ['Salaries 45%', 'Marketing 18%', 'Licenses 15%', 'Utilities 12%', 'Tech 10%'],
                 weeks: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6', 'Week 7', 'Week 8', 'Week 9', 'Week 10', 'Week 11', 'Week 12'],
                 revenueLabel: 'Projected Revenue (SAR)',
                 costsLabel: 'Operating Costs (SAR)',
                 currencySuffix: ' SAR'
             },
             ar: {
-                budgetPie: ['الإيجار 30%', 'الرواتب 15%', 'التسويق 18%', 'الرخص 15%', 'المرافق 12%', 'التقنية 10%'],
+                budgetPie: ['الرواتب 45%', 'التسويق 18%', 'الرخص 15%', 'المرافق 12%', 'التقنية 10%'],
                 weeks: ['الأسبوع 1', 'الأسبوع 2', 'الأسبوع 3', 'الأسبوع 4', 'الأسبوع 5', 'الأسبوع 6', 'الأسبوع 7', 'الأسبوع 8', 'الأسبوع 9', 'الأسبوع 10', 'الأسبوع 11', 'الأسبوع 12'],
                 revenueLabel: 'الإيرادات المتوقعة (ريال)',
                 costsLabel: 'التكاليف التشغيلية (ريال)',
@@ -756,9 +749,8 @@
                 data: {
                     labels: chartLabels[currentLang].budgetPie,
                     datasets: [{
-                        data: [30, 15, 18, 15, 12, 10],
+                        data: [45, 18, 15, 12, 10],
                         backgroundColor: [
-                            '#1a3a52',
                             '#2ecc71',
                             '#3498db',
                             '#f39c12',
